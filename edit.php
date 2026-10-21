@@ -8,6 +8,11 @@ $stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id;');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
 
+$authorsStmt = $pdo->prepare('SELECT ba.id, a.first_name, a.last_name
+    FROM book_authors ba LEFT JOIN authors a ON ba.author_id = a.id
+    WHERE ba.book_id = :book_id;');
+$authorsStmt->execute(['book_id' => $id]);
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +35,25 @@ $book = $stmt->fetch();
     <button type="submit">Salvesta</button>
 
 </form>
+
+<ul>
+
+<?php while ( $author = $authorsStmt->fetch() ) { ?>
+
+    <form action="remove_author.php" method="post">
+
+        <li>
+            <input type="hidden" name="book-id" value="<?= $id; ?>">
+            <input type="hidden" name="book-author-id" value="<?= $author['id']; ?>">
+            <?= $author['first_name']; ?> <?= $author['last_name']; ?>
+            <button type="submit">X</button>
+        </li>
+
+    </form>
+
+<?php } ?>
+
+</ul>
 
 </body>
 </html>

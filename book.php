@@ -6,9 +6,14 @@ $id = $_GET['id'];
 
 $isSuccess = $_GET['update'];
 
-$stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id;');
-$stmt->execute(['id' => $id]);
-$book = $stmt->fetch();
+$bookStmt = $pdo->prepare('SELECT * FROM books WHERE id = :id;');
+$bookStmt->execute(['id' => $id]);
+$book = $bookStmt->fetch();
+
+$authorsStmt = $pdo->prepare('SELECT a.first_name, a.last_name
+    FROM book_authors ba LEFT JOIN authors a ON ba.author_id = a.id
+    WHERE ba.book_id = :book_id;');
+$authorsStmt->execute(['book_id' => $id]);
 
 ?>
 
@@ -28,6 +33,16 @@ $book = $stmt->fetch();
 <?php } ?>
 
 <h1><?= $book['title']; ?></h1>
+
+<ul>
+
+<?php while ( $author = $authorsStmt->fetch() ) { ?>
+
+    <li><?= $author['first_name']; ?> <?= $author['last_name']; ?></li>
+
+<?php } ?>
+
+</ul>
 
 <a href="edit.php?id=<?= $book['id']; ?>">muuda</a>
 <a href="./">Nimekiri</a>
