@@ -13,6 +13,9 @@ $authorsStmt = $pdo->prepare('SELECT ba.id, a.first_name, a.last_name
     WHERE ba.book_id = :book_id;');
 $authorsStmt->execute(['book_id' => $id]);
 
+$allAuthorsStmt = $pdo->prepare('SELECT * FROM authors a WHERE a.id NOT IN (SELECT ba.author_id FROM book_authors ba WHERE ba.book_id = :book_id);');
+$allAuthorsStmt->execute(['book_id' => $id]);
+
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +55,23 @@ $authorsStmt->execute(['book_id' => $id]);
     </form>
 
 <?php } ?>
+
+<h4>Lisa autor:</h4>
+<form action="add_author.php" method="post">
+    <input type="hidden" name="book-id" value="<?= $id; ?>">
+    <select name="author-id">
+        <option selected="true" disabled="disabled"></option>
+
+<?php while ( $author = $allAuthorsStmt->fetch() ) { ?>
+
+        <option value="<?= $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
+
+<?php } ?>
+
+    </select>
+
+    <button type="submit">Salvesta</button>
+</form>
 
 </ul>
 
