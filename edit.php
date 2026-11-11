@@ -27,19 +27,19 @@ $allAuthorsStmt->execute(['book_id' => $id]);
 </head>
 <body>
 
-<form action="update_book.php" method="post">
+    <form action="update_book.php" method="post">
 
-    <input type="hidden" name="id" value="<?= $id; ?>">
+        <input type="hidden" name="id" value="<?= $id; ?>">
 
-    <input type="text" name="title" value="<?= $book['title']; ?>">
+        <input type="text" name="title" value="<?= $book['title']; ?>">
 
-    <br>
+        <br>
 
-    <button type="submit">Salvesta</button>
+        <button type="submit">Salvesta</button>
 
-</form>
+    </form>
 
-<ul>
+    <ul>
 
 <?php while ( $author = $authorsStmt->fetch() ) { ?>
 
@@ -56,24 +56,27 @@ $allAuthorsStmt->execute(['book_id' => $id]);
 
 <?php } ?>
 
-<h4>Lisa autor:</h4>
-<form action="add_author.php" method="post">
-    <input type="hidden" name="book-id" value="<?= $id; ?>">
-    <select name="author-id">
-        <option selected="true" disabled="disabled"></option>
+    </ul>
+
+    <h4>Lisa autor:</h4>
+    <form action="add_author.php" method="post">
+        
+        <input type="hidden" name="book-id" value="<?= $id; ?>">
+        
+        <select name="author-id">
+            
+            <option selected="true" disabled="disabled"></option>
 
 <?php while ( $author = $allAuthorsStmt->fetch() ) { ?>
 
-        <option value="<?= $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
+            <option value="<?= $author['id']; ?>"><?= $author['first_name']; ?> <?= $author['last_name']; ?></option>
 
 <?php } ?>
 
-    </select>
+        </select>
 
-    <button type="submit">Salvesta</button>
-</form>
-
-</ul>
+        <button type="submit">Salvesta</button>
+    </form>
 
 </body>
 </html>
