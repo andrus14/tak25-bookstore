@@ -10,4 +10,4 @@ $stmt->execute([
     'title' => $_POST['title']
 ]);
 
-header("Location: book.php?id={$id}&update=success");
+header("Location: edit.php?id={$id}&update=success");

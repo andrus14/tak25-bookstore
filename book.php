@@ -4,8 +4,6 @@ require 'database.php';
 
 $id = $_GET['id'];
 
-$isSuccess = $_GET['update'];
-
 $bookStmt = $pdo->prepare('SELECT * FROM books WHERE id = :id;');
 $bookStmt->execute(['id' => $id]);
 $book = $bookStmt->fetch();
@@ -26,26 +24,31 @@ $authorsStmt->execute(['book_id' => $id]);
 </head>
 <body>
     
-<?php if ( $isSuccess == 'success' ) { ?>
+    <h1><?= $book['title']; ?></h1>
 
-<span style="display: flex; justify-content: center; color: forestgreen; font-weight: bold; font-size: larger;">Muudatused salvestatud!</span>
-
-<?php } ?>
-
-<h1><?= $book['title']; ?></h1>
-
-<ul>
+    <ul>
 
 <?php while ( $author = $authorsStmt->fetch() ) { ?>
 
-    <li><?= $author['first_name']; ?> <?= $author['last_name']; ?></li>
+        <li><?= $author['first_name']; ?> <?= $author['last_name']; ?></li>
 
 <?php } ?>
 
-</ul>
+    </ul>
 
-<a href="edit.php?id=<?= $book['id']; ?>">muuda</a>
-<a href="./">Nimekiri</a>
+    <a href="edit.php?id=<?= $book['id']; ?>">muuda</a> ★ 
+    
+    <form action="delete.php" method="post" style="display: inline;">
+
+        <input type="hidden" name="id" value="<?= $book['id']; ?>">
+    
+        <button type="submit">kustuta</button>
+
+    </form>
+
+    <p>
+        <a href="./">Nimekiri</a>
+    </p>
 
 </body>
 </html>

@@ -4,6 +4,8 @@ require 'database.php';
 
 $id = $_GET['id'];
 
+$isSuccess = $_GET['update'];
+
 $stmt = $pdo->prepare('SELECT * FROM books WHERE id = :id;');
 $stmt->execute(['id' => $id]);
 $book = $stmt->fetch();
@@ -26,6 +28,12 @@ $allAuthorsStmt->execute(['book_id' => $id]);
     <title><?= $book['title']; ?></title>
 </head>
 <body>
+
+<?php if ( $isSuccess == 'success' ) { ?>
+
+    <span style="display: flex; justify-content: center; color: forestgreen; font-weight: bold; font-size: larger;">Muudatused salvestatud!</span>
+
+<?php } ?>
 
     <form action="update_book.php" method="post">
 
@@ -77,6 +85,10 @@ $allAuthorsStmt->execute(['book_id' => $id]);
 
         <button type="submit">Salvesta</button>
     </form>
+
+    <p>
+        <a href="book.php?id=<?= $id ;?>">Tagasi</a>
+    </p>
 
 </body>
 </html>
